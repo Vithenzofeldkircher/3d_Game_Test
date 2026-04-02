@@ -12,12 +12,17 @@ public class Gun : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Physics.Raycast(_camera.position, _camera.forward, out RaycastHit target, LayerMask.NameToLayer("Enemy")))
-        {
+
+
+            if (Physics.Raycast(_camera.position, _camera.forward, out RaycastHit target))
+            return;
+            if(target.collider.TryGetComponent(out IShootable shootable))
+            return;
             if (Input.GetButtonDown("Fire1"))
-            {
-                Destroy(target.transform.gameObject);
-            }
-        }
+            return;
+
+        shootable.Hitted(1);
+            
+        
     }
 }
