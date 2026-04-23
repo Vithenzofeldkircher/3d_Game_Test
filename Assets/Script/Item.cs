@@ -3,10 +3,8 @@ using UnityEngine;
 public abstract class Item : MonoBehaviour, ICollectable
 {
 
-    public GunElement Collect()
-    {
-        throw new System.NotImplementedException();
-    }
+    public abstract Element Collect();
+   
     //Métodos abstratos
     //Forla os filhos a implementarem
     //Usado quando todos os filhos usam, mas com comportamentos diferentes
@@ -33,5 +31,10 @@ public abstract class Item : MonoBehaviour, ICollectable
     protected void Teste3()
     {
 
+    }
+
+    Element ICollectable.Collect()
+    {
+        return Collect();
     }
 }
