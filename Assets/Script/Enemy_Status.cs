@@ -1,28 +1,24 @@
 using UnityEngine;
 
-public class Enemy_Status : MonoBehaviour, IShootable
+public class EnemyStatus : MonoBehaviour, IShootable
 {
-    [SerializeField] float _lifeMax = 2f;
     [SerializeField] private GameObject _bloodEffect;
-    private float _curretnLife;
-
-    public void Hitted(float damege, Vector3 shootPoint)
+    [SerializeField] float _lifeMax = 2;
+    private float _currentLife;
+    public void Hitted(float damage, Vector3 shootPoint)
     {
-        _curretnLife -= damege;
+        _currentLife -= damage;
 
         GameObject blood = Instantiate(_bloodEffect, shootPoint, Quaternion.LookRotation(shootPoint - transform.position));
         blood.transform.SetParent(transform);
-        if (_curretnLife > 0)
+        if (_currentLife > 0)
             return;
 
-       
         Destroy(gameObject);
     }
-
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        _curretnLife = _lifeMax;
+        _currentLife = _lifeMax;
     }
-
 }
