@@ -245,8 +245,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 11f775afab731ab4ab3708c3683547a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Enemy_Status
-  _lifeMax: 3
-  _bloodEffect: {fileID: 1000013355911406, guid: d32aa916f50cac94db11e6f19821a58f, type: 3}
+  _lifeMax: 30
+  _bloodEffect: {fileID: 5927997549887284853, guid: b7b451df1a9d3da4cbf103a7fa4605df, type: 3}
 --- !u!1 &416151492
 GameObject:
   m_ObjectHideFlags: 0
@@ -1105,10 +1105,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Gun
   _handGun:
-    _name: Pistol
+    _name: 'Gomu Gomu no Pistol '
     _damage: 1
-    _shootRate: 1
-    _Clip_Size: 5
+    _shootRate: 0.3
+    _Clip_Size: 10
     _ammunation: 5
 --- !u!1001 &2084445384
 PrefabInstance:
