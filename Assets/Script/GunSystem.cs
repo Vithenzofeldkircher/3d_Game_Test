@@ -1,9 +1,38 @@
+using NUnit.Framework;
+using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
+[System.Serializable]
+public class Guninventory
+{
+    [SerializeField] private List<GunElement> _guns;
+
+    public object Gun { get; internal set; }
+    public object Guns { get; internal set; }
+
+    //Array [] possuem tamanho fixo
+    //arrays são usado em um inventario fixo
+    //armazenamento de referencias fixas
+
+    //listas <> possuem tamanho dinamico
+    //listas são boas para controle de inimigos
+
+    public void addweapon(GunElement newgun)
+    {
+        _guns.Add(newgun);
+    }
+}
+
+
+
 public class GunSystem : MonoBehaviour
 {
+
+    [SerializeField] Guninventory _inventory;
+    [SerializeField] private Transform _Hand_Gun_Model_Parent;
     private Transform _camera;
     [SerializeField] private GunElement _handGun;
     private float _shootTimer;
@@ -15,11 +44,21 @@ public class GunSystem : MonoBehaviour
         _handGun.Initialize();
         _shootTimer = _handGun.ShootRate;
         _handGun.OnReload.AddListener(() => StartCoroutine(Reload()));
+        _inventory.addweapon(_handGun);
     }
 
     // Update is called once per frame
     void Update()
     {
+        
+
+        float currentGunIndex = Input.GetAxis("Mouse ScrolWheel");
+
+        if(currentGunIndex != 0)
+        {
+            ChangeWeapon(currentGunIndex);
+        }
+
         if (Input.GetButtonDown("Reload"))
         {
             if (_handGun.Ammunation <= 0)
@@ -46,9 +85,29 @@ public class GunSystem : MonoBehaviour
             return;
 
         //Aciona o método do contrato IShootable
-        shootable.Hitted(1, target.point);
+        shootable.Hitted(_handGun.Damage, target.point);
         _shootTimer = 0;
     }
+
+    private void ChangeWeapon(float currentGunIndex)
+    {
+        if (_inventory.Guns.Count <= 0)
+            return;
+
+        int currentIndex = _inventory.Guns.IndexOf(_handGun);
+        currentIndex += (int)Mathf.Sign(nextIndex)
+
+        if(currentIndex == _inventory.Guns.Count)
+        {
+            currentIndex = 0;
+        }
+
+        else if (currentIndex == 0)
+        {
+            currentIndex = _inventory.Guns.Count - 1;
+        }
+    }
+
     IEnumerator Reload()
     {
         _isReloading = true;
@@ -68,6 +127,11 @@ public class GunSystem : MonoBehaviour
         _handGun.Initialize();
         _shootTimer = _handGun.ShootRate;
         _handGun.OnReload.AddListener(() => StartCoroutine(Reload()));
+        _inventory.addweapon(New_Gun);
+        Destroy(_Hand_Gun_Model_Parent.GetChild(0).gameObject);
+        GameObject gun = Instantiate(_handGun.Gun_model, _Hand_Gun_Model_Parent);
+        gun.layer = LayerMask.NameToLayer("Gun");
+        gun.transform.localPosition = new Vector3(0, 0 , -gun.transform.localScale.z);
     }
 
 }

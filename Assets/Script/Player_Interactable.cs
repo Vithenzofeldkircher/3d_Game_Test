@@ -6,21 +6,23 @@ public class PlayerInteractable : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        _gunSystem = GetComponent<GunSystem>();
+        _gunSystem = GetComponentInParent<GunSystem>();
     }
 
     // Update is called once per frame
     void Update()
     {
     }
-    private void OnCollisionEnter(Collision collision)
+    private void OnTriggerEnter(Collider other)
     {
-        if (collision.gameObject.TryGetComponent(out ICollectable collectable))
+
+        if (!other.gameObject.TryGetComponent(out ICollectable collectable))
             return;
 
-        switch (collision.gameObject.tag)
+        switch (other.gameObject.tag)
         {
             case "Gun":
+                print("colidiu");
                 _gunSystem.Add_New_Gun((GunElement)collectable.Collect());
                 break;
             case "Ammo":
