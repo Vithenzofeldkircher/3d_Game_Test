@@ -67,6 +67,5 @@ public class GunElement : Element
     public float ShootRate { get => _shootRate; }
     public float Ammunation { get => _ammunation; }
     public float ReloadTime { get => _reloadTime; }
-
     public bool HasScope { get => _HasScope;}
 }

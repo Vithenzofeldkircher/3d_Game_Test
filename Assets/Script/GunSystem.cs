@@ -8,17 +8,10 @@ using UnityEngine.Events;
 [System.Serializable]
 public class Guninventory
 {
-    [SerializeField] private List<GunElement> _guns;
+    [SerializeField] private List<GunElement> _guns = new List<GunElement>();
 
-    public object Gun { get; internal set; }
-    public object Guns { get; internal set; }
-
-    //Array [] possuem tamanho fixo
-    //arrays são usado em um inventario fixo
-    //armazenamento de referencias fixas
-
-    //listas <> possuem tamanho dinamico
-    //listas são boas para controle de inimigos
+    // Agora o sistema consegue ler a lista real
+    public List<GunElement> Guns => _guns;
 
     public void addweapon(GunElement newgun)
     {
@@ -89,25 +82,26 @@ public class GunSystem : MonoBehaviour
         _shootTimer = 0;
     }
 
-    private void ChangeWeapon(float currentGunIndex)
+    private void ChangeWeapon(float nexIndex)
     {
-        if (_inventory.Guns.Count <= 0)
-            return;
+        if (_inventory.Guns.Count <= 0) return;
 
         int currentIndex = _inventory.Guns.IndexOf(_handGun);
-        currentIndex += (int)Mathf.Sign(nextIndex)
+        currentIndex += (int)Mathf.Sign(nexIndex);
 
         if(currentIndex == _inventory.Guns.Count)
         {
             currentIndex = 0;
         }
 
-        else if (currentIndex == 0)
+        else if (currentIndex < 0)
         {
             currentIndex = _inventory.Guns.Count - 1;
         }
 
-        _handGun = _inventory.Guns.Count - 1;
+        _handGun = _inventory.Guns[currentIndex];
+        ChagenGunVisual();
+
     }
 
     IEnumerator Reload()
@@ -130,10 +124,15 @@ public class GunSystem : MonoBehaviour
         _shootTimer = _handGun.ShootRate;
         _handGun.OnReload.AddListener(() => StartCoroutine(Reload()));
         _inventory.addweapon(New_Gun);
+        ChagenGunVisual();
+    }
+
+    public void ChagenGunVisual()
+    {
         Destroy(_Hand_Gun_Model_Parent.GetChild(0).gameObject);
         GameObject gun = Instantiate(_handGun.Gun_model, _Hand_Gun_Model_Parent);
         gun.layer = LayerMask.NameToLayer("Gun");
-        gun.transform.localPosition = new Vector3(0, 0 , -gun.transform.localScale.z);
+        gun.transform.localPosition = new Vector3(0, 0, -gun.transform.localScale.z);
     }
 
 }
